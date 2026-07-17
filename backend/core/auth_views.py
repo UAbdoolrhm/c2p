@@ -50,15 +50,12 @@ class CustomRegisterView(APIView):
         if User.objects.filter(username__iexact=username).exists():
             return Response({'error': 'Username is already taken.'}, status=status.HTTP_400_BAD_REQUEST)
             
-        # If there are no admins yet, the first user becomes an admin automatically
-        has_admin = User.objects.filter(role='ADMIN').exists()
-        
         # Create user without a usable password
         user = User(
             username=username,
             first_name=first_name,
             last_name=last_name,
-            role='STUDENT' if has_admin else 'ADMIN'
+            role='STUDENT'  # Default to student
         )
         user.set_unusable_password()
         user.save()
