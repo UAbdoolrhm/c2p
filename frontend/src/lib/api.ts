@@ -1,27 +1,19 @@
-const API_URL = 'http://192.168.0.173:8000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
-export const fetchAPI = async (endpoint: string, options: RequestInit = {}) => {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
-  
+export const fetchAPI = async (
+  endpoint: string,
+  options: RequestInit = {}
+) => {
+  const token = localStorage.getItem("access_token");
+
   const headers = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...options.headers,
   };
 
-  const response = await fetch(`${API_URL}${endpoint}`, {
+  return fetch(`${API_URL}${endpoint}`, {
     ...options,
     headers,
   });
-
-  if (response.status === 401) {
-    // Handle token refresh logic here if needed, or simply log out
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      window.location.href = '/';
-    }
-  }
-
-  return response;
 };
