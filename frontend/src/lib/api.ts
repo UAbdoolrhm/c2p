@@ -6,11 +6,19 @@ export const fetchAPI = async (
 ) => {
   const token = localStorage.getItem("access_token");
 
-  const headers = {
+  const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...options.headers,
+    ...(options.headers as Record<string, string>),
   };
+
+  // Only send the token to protected endpoints
+  if (
+    token &&
+    endpoint !== "/auth/login/" &&
+    endpoint !== "/auth/register/"
+  ) {
+    headers.Authorization = `Bearer ${token}`;
+  }
 
   return fetch(`${API_URL}${endpoint}`, {
     ...options,
