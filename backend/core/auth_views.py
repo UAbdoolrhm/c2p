@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
+from rest_framework.permissions import AllowAny
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -17,7 +18,7 @@ class CustomLoginView(APIView):
     """
     Authenticates a user using ONLY their username.
     """
-    permission_classes = []
+    permission_classes = [AllowAny]
 
     def post(self, request):
         username = request.data.get('username')
@@ -43,7 +44,7 @@ class CustomRegisterView(APIView):
     """
     Registers a new user with username, first_name, and last_name (surname).
     """
-    permission_classes = []
+    permission_classes = [AllowAny]
 
     def post(self, request):
         username = request.data.get('username')
